@@ -175,7 +175,11 @@ Inclui:
 
 ---
 
-# 📝 Licença
+## Deployment Architecture
+![](diagrams/deployment.png)
 
-MIT — uso livre para testes técnicos.
+## Domain Model (ERD)
+![](diagrams/erd.png)
 
+## Sequence Diagram (Billing Flow)
+![](diagrams/sequence.png)

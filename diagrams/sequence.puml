@@ -1,0 +1,26 @@
+@startuml
+
+autonumber
+
+participant Rails as "Billing Core"
+participant Node as "Gateway Service"
+participant Pagarme as "Pagar.me"
+participant Webhook
+
+== Geração da Fatura ==
+
+Rails -> Rails: generate invoice
+Rails -> Node: POST /charges (amount, customerId, invoiceId)
+
+== Gateway Processing ==
+Node -> Pagarme: charge request
+Pagarme -> Node: charge status (processing)
+
+Node -> Rails: return charge_id (processing)
+
+== Webhook ==
+Pagarme -> Node: webhook event (paid/refused)
+Node -> Rails: POST /webhooks/payment
+Rails -> Rails: update payment + invoice status
+
+@enduml

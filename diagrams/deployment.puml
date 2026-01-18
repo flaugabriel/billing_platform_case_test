@@ -1,0 +1,29 @@
+@startuml
+
+node "Billing Core (Rails)" {
+  [API] --> [Sidekiq]
+  [API] --> [Postgres]
+  [Sidekiq] --> [Redis]
+}
+
+node "Gateway Service (Node/NestJS)" {
+  [ChargesController]
+  [WebhooksController]
+  [FakeAdapter]
+  [PagarmeAdapter]
+}
+
+cloud "Pagar.me" {
+  [Charges API]
+  [Webhook]
+}
+
+[API] --> [ChargesController] : HTTP POST /charges
+[ChargesController] --> [FakeAdapter]
+[ChargesController] --> [PagarmeAdapter]
+
+[Webhook] --> [WebhooksController]
+
+[WebhooksController] --> [API] : POST /webhooks/payment
+
+@enduml
