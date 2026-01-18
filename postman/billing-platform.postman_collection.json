@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "Billing Platform",
+    "_postman_id": "d5b23e3e-4411-4a37-9071-96b47b379030",
+    "description": "Postman Collection para testar a plataforma de billing (Rails + Gateway)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Criar cliente",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"client\": {\n    \"name\": \"Hotel Brasil\",\n    \"document\": \"12345678000199\",\n    \"email\": \"contato@hotel.com\",\n    \"billing_email\": \"financeiro@hotel.com\"\n  }\n}"
+        },
+        "url": { "raw": "http://localhost:3001/api/v1/clients", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "clients"] }
+      }
+    },
+    {
+      "name": "02 - Criar produto",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"product\": {\n    \"name\": \"PMS\",\n    \"kind\": \"pms\"\n  }\n}"
+        },
+        "url": { "raw": "http://localhost:3001/api/v1/products", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "products"] }
+      }
+    },
+    {
+      "name": "03 - Criar assinatura",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n \"subscription\": {\n   \"client_id\": 1,\n   \"product_id\": 1,\n   \"price_cents\": 250000,\n   \"cycle_day\": 5,\n   \"charge_type\": \"recurring\"\n }\n}"
+        },
+        "url": { "raw": "http://localhost:3001/api/v1/subscriptions", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "subscriptions"] }
+      }
+    },
+    {
+      "name": "04 - Trigger Job de Fatura",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": { "raw": "http://localhost:3001/run/invoice-job", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["run", "invoice-job"] }
+      }
+    },
+    {
+      "name": "05 - Ver Fatura",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3001/api/v1/invoices/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "invoices", "1"] }
+      }
+    },
+    {
+      "name": "06 - Simular Cobrança (Gateway)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": 250000,\n  \"customerId\": 1,\n  \"paymentMethod\": \"credit_card\",\n  \"invoiceId\": 1\n}"
+        },
+        "url": { "raw": "http://localhost:3002/charges", "protocol": "http", "host": ["localhost"], "port": "3002", "path": ["charges"] }
+      }
+    },
+    {
+      "name": "07 - Simular Webhook do Pagar.me → Gateway",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"data\": {\n    \"id\": \"fake_123\",\n    \"status\": \"paid\"\n  }\n}"
+        },
+        "url": { "raw": "http://localhost:3002/webhooks/pagarme", "protocol": "http", "host": ["localhost"], "port": "3002", "path": ["webhooks", "pagarme"] }
+      }
+    },
+    {
+      "name": "08 - Simular Webhook Gateway → Rails",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"charge_id\": \"fake_123\",\n  \"status\": \"paid\",\n  \"raw\": {}\n}"
+        },
+        "url": { "raw": "http://localhost:3001/api/v1/webhooks/payment", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "webhooks", "payment"] }
+      }
+    },
+    {
+      "name": "09 - Check resultado final",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "http://localhost:3001/api/v1/invoices/1", "protocol": "http", "host": ["localhost"], "port": "3001", "path": ["api", "v1", "invoices", "1"] }
+      }
+    }
+  ]
+}
