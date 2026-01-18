@@ -1,0 +1,64 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: billing_core_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:6
+    ports:
+      - "6379:6379"
+
+  billing-core:
+    build: ./billing-core
+    command: bash -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0"
+    volumes:
+      - ./billing-core:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/billing_core_dev
+      REDIS_URL: redis://redis:6379/1
+      GATEWAY_URL: http://payment-gateway:3000
+      RAILS_ENV: development
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "3001:3000"
+
+  sidekiq:
+    build: ./billing-core
+    command: bundle exec sidekiq
+    volumes:
+      - ./billing-core:/app
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/billing_core_dev
+      REDIS_URL: redis://redis:6379/1
+      RAILS_ENV: development
+    depends_on:
+      - billing-core
+      - redis
+
+  payment-gateway:
+    build: ./payment-gateway
+    command: npm run start:dev
+    volumes:
+      - ./payment-gateway:/app
+    environment:
+      USE_FAKE: "true"
+      PAGARME_API_KEY: "your-key-here"
+      BILLING_WEBHOOK_URL: http://billing-core:3000/api/v1/webhooks/payment
+      PORT: 3000
+    depends_on:
+      - billing-core
+    ports:
+      - "3002:3000"
+
+volumes:
+  pgdata:
