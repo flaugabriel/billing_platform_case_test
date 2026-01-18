@@ -1,5 +1,5 @@
 # Billing Platform — Rails + Node + Docker  
-**Autor:** [Seu Nome Aqui]  
+**Autor:** Gabriel Flauzino Mota  
 **Objetivo:** Unificar cobrança utilizando Pagar.me como gateway principal, substituindo ASAAS, garantindo suporte a múltiplos produtos e múltiplos modelos de cobrança.
 
 ---
