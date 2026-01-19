@@ -108,6 +108,13 @@ POST /api/v1/webhooks/payment
 
 # 🐳 Como rodar tudo
 
+### Entre no projeto payment-gateway e rode o comando:
+
+```
+yarn install
+```
+
+### volte para raiz e rode:
 ```
 docker-compose up --build
 ```
