@@ -1,4 +1,10 @@
 class Api::V1::SubscriptionsController < ApplicationController
+
+  def index
+    @subscriptions = Subscription.all
+    render json: @subscriptions
+  end
+
   def create
     sub = Subscription.create!(sub_params)
     render json: sub, status: :created

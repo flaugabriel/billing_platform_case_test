@@ -1,4 +1,10 @@
 class Api::V1::ClientsController < ApplicationController
+
+  def index
+    clients = Client.all
+    render json: clients
+  end
+
   def create
     client = Client.create!(client_params)
     render json: client, status: :created

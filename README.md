@@ -176,10 +176,10 @@ Inclui:
 ---
 
 ## Deployment Architecture
-![](diagrams/deployment.png)
+![](diagrams/deployment.jpeg)
 
 ## Domain Model (ERD)
-![](diagrams/erd.png)
+![](diagrams/erd.jpeg)
 
 ## Sequence Diagram (Billing Flow)
-![](diagrams/sequence.png)
+![](diagrams/sequence.jpeg)
