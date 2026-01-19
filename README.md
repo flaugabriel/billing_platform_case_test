@@ -172,16 +172,6 @@ Inclui:
 
 ---
 
-# 🧩 Próximos passos (evolução natural)
-
-- Billing analytics (MRR, churn, ARPA, LTV)
-- Suporte a cupons
-- Split de pagamentos
-- Suporte Stripe/Adyen via novos adapters
-- Dashboard administrativo
-
----
-
 ## Deployment Architecture
 ![](diagrams/deployment.jpeg)
 
