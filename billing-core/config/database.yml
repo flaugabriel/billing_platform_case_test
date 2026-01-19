@@ -8,4 +8,4 @@ development:
   database: billing_core_dev
   username: postgres
   password: postgres
-  host: localhost
+  host: postgres

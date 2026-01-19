@@ -10,36 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2026_01_17_165306) do
+ActiveRecord::Schema[7.0].define(version: 2026_01_18_181717) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "clients", force: :cascade do |t|
-    t.string "name"
-    t.string "document"
+    t.string "name", null: false
+    t.string "document", null: false
     t.string "email"
     t.string "billing_email"
+    t.string "payment_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "invoice_items", force: :cascade do |t|
-    t.bigint "invoice_id", null: false
-    t.bigint "product_id", null: false
-    t.integer "quantity"
-    t.integer "unit_price_cents"
-    t.integer "total_cents"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
-    t.index ["product_id"], name: "index_invoice_items_on_product_id"
+    t.index ["document"], name: "index_clients_on_document", unique: true
   end
 
   create_table "invoices", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.date "due_date"
-    t.string "status"
-    t.integer "total_cents"
+    t.string "status", default: "pending", null: false
+    t.string "legacy_origin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["client_id"], name: "index_invoices_on_client_id"
@@ -47,7 +37,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_17_165306) do
 
   create_table "payments", force: :cascade do |t|
     t.bigint "invoice_id", null: false
-    t.string "status"
+    t.string "status", default: "created"
     t.string "method"
     t.string "gateway_charge_id"
     t.jsonb "gateway_response"
@@ -57,8 +47,8 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_17_165306) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string "name"
-    t.string "kind"
+    t.string "name", null: false
+    t.string "kind", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -66,18 +56,18 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_17_165306) do
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "client_id", null: false
     t.bigint "product_id", null: false
-    t.integer "price_cents"
-    t.integer "cycle_day"
-    t.string "status"
-    t.string "charge_type"
+    t.integer "price_cents", null: false
+    t.integer "cycle_day", null: false
+    t.string "status", default: "active", null: false
+    t.string "charge_type", default: "recurring", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "payment_method", default: 0
+    t.datetime "next_billing_at"
     t.index ["client_id"], name: "index_subscriptions_on_client_id"
     t.index ["product_id"], name: "index_subscriptions_on_product_id"
   end
 
-  add_foreign_key "invoice_items", "invoices"
-  add_foreign_key "invoice_items", "products"
   add_foreign_key "invoices", "clients"
   add_foreign_key "payments", "invoices"
   add_foreign_key "subscriptions", "clients"

@@ -6,8 +6,9 @@ export class WebhooksController {
   @Post('pagarme')
   async handlePagarme(@Body() event: any) {
     const unified = this.mapStatus(event.data.status);
+    const url = process.env.BILLING_WEBHOOK_URL ?? 'http://billing-core:3000/api/v1/webhooks/payment'
 
-    await axios.post(process.env.BILLING_WEBHOOK_URL, {
+    await axios.post(url, {
       charge_id: event.data.id,
       status: unified,
       raw: event,

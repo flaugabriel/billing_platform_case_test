@@ -7,7 +7,7 @@ class Billing::ChargePaymentService
       req.body = {
         amount: invoice.total_cents,
         customerId: client.id,
-        paymentMethod: 'credit_card',
+        paymentMethod: invoice.payment_method,
         invoiceId: invoice.id
       }.to_json
     end
@@ -17,6 +17,7 @@ class Billing::ChargePaymentService
     Payment.create!(
       invoice: invoice,
       status: 'processing',
+      payment_method: invoice.payment_method,
       gateway_charge_id: data['charge_id']
     )
   end

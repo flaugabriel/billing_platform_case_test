@@ -1,4 +1,4 @@
-class CreateSubscriptions < ActiveRecord::Migration[7.1]
+class CreateSubscriptions <  ActiveRecord::Migration[7.0]
   def change
     create_table :subscriptions do |t|
       t.references :client, null: false, foreign_key: true
@@ -9,5 +9,7 @@ class CreateSubscriptions < ActiveRecord::Migration[7.1]
       t.string :charge_type, null: false, default: 'recurring'
       t.timestamps
     end
+
+    add_column :subscriptions, :payment_method, :integer, default: 0
   end
 end
