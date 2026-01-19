@@ -5,6 +5,12 @@ class Api::V1::SubscriptionsController < ApplicationController
     render json: @subscriptions
   end
 
+  def updated_billing_date
+    @subscriptions = Subscription.find(params[:id])
+    @subscriptions.update(next_billing_at: Date.today)
+    render json: @subscriptions
+  end
+
   def create
     sub = Subscription.create!(sub_params)
     render json: sub, status: :created

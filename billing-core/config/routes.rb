@@ -7,7 +7,8 @@ Rails.application.routes.draw do
       post '/run/invoice-job', to: 'jobs#run_cycle'
       resources :clients, only: [:create, :show, :index]
       resources :products, only: [:create, :show, :index]
-      resources :subscriptions, only: [:create, :index] do
+      resources :subscriptions, only: [:create, :index, :updated_billing_date] do
+        put :updated_billing_date, on: :member
         member do
           patch :cancel
         end

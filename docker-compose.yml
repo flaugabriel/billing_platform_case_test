@@ -18,6 +18,8 @@ services:
 
   billing-core:
     build: ./billing-core
+    stdin_open: true
+    tty: true
     command: bash -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0"
     volumes:
       - ./billing-core:/app
