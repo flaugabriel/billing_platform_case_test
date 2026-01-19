@@ -180,3 +180,24 @@ Inclui:
 
 ## Sequence Diagram (Billing Flow)
 ![](diagrams/sequence.jpeg)
+
+# 🎯 Porque Node.js como Gateway e não Rails?
+PSPs usam Node - PSPs (Pagar.me, Stripe, Adyen, WorldPay, MercadoPago) têm SDKs melhores em Node.
+* A separação de domínios DDD/Boundary
+  #### Design temos 2 domínios distintos:
+  * Billing Core (Rails):
+    * clientes
+    * produtos
+    * subscriptions
+    * invoices
+    * conciliação
+    * reconciliação
+    * ciclo mensal
+
+  * Payment Gateway (Node):
+    * métodos de pagamento
+    * tokenização
+    * integração com PSPs (Pagar.me)
+    * webhooks
+    * antifraude
+    * meio de pagamento
