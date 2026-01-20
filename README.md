@@ -119,6 +119,13 @@ yarn install
 docker-compose up --build
 ```
 
+### Acesso o container billing-core-1 e rode
+
+```
+rails db:create
+rails db:migrate
+```
+
 Acessos:
 
 - Rails: http://localhost:3001
