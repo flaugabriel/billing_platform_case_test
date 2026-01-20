@@ -58,7 +58,7 @@ Payment
 
 Diagrama ERD:
 
-![](diagrams/erd.png)
+![](diagrams/erd.jpeg)
 
 ---
 
