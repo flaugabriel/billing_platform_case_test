@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2026_01_19_161421) do
     t.string "legacy_origin"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "payment_method", default: 0
     t.index ["client_id"], name: "index_invoices_on_client_id"
   end
 

@@ -7,5 +7,7 @@ class CreateInvoices < ActiveRecord::Migration[7.0]
       t.string :legacy_origin
       t.timestamps
     end
+
+    add_column :invoices, :payment_method, :integer, default: 0
   end
 end

@@ -1,0 +1,3 @@
+invoice_generation:
+  cron: "0 8 1 * *"
+  class: "Billing::InvoiceGenerationJob"

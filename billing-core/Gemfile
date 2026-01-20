@@ -21,9 +21,6 @@ group :development, :test do
   gem 'pry-rails'
 end
 
-group :development do
-end
-
 gem 'sidekiq'
 gem 'redis'
 gem 'faraday'

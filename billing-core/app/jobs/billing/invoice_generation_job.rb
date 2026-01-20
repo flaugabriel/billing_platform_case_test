@@ -3,12 +3,16 @@ class Billing::InvoiceGenerationJob
 
   def perform
     Subscription.active.where(next_billing_at: Date.today).each do |sub|
+
+      p '23424234'
       invoice = Invoice.create!(
         client: sub.client,
         due_date: Date.today + 5.days,
-        status: 'pending'
+        status: 'pending',
+        payment_method: sub.payment_method
       )
 
+      p invoice
       InvoiceItem.create!(
         invoice: invoice,
         product: sub.product,
